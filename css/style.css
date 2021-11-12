@@ -72,16 +72,18 @@ body {
   padding: 10px 50px;
 }
 
-.player--number {
+.player--card {
   font-size: 26px;
   font-weight: 600;
-  background: #ea5995;
+  background: #cecece;
   color: #fff;
   width: 134px;
   height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #000;
+  border-radius: 15px;
 }
 
 .btn {
@@ -139,5 +141,11 @@ body {
 
   .game-box {
     margin-bottom: 0;
+  }
+}
+
+@media all and (max-width: 370px) {
+  .player {
+    padding: 0;
   }
 }

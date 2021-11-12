@@ -10,19 +10,44 @@ function pageReload() {
   document.location.reload();
 }
 
+function getCardValue(cardNumber) {
+  if (cardNumber >= 1 && cardNumber <= 4)
+  {
+    return 11;
+  } else if (cardNumber >= 5 && cardNumber <= 8) {
+    return 6;
+  } else if (cardNumber >= 9 && cardNumber <= 12) {
+    return 7;
+  } else if (cardNumber >= 13 && cardNumber <= 16) {
+    return 8;
+  } else if (cardNumber >= 17 && cardNumber <= 20) {
+    return 9;
+  } else if (cardNumber >= 21 && cardNumber <= 24) {
+    return 10;
+  } else if (cardNumber >= 25 && cardNumber <= 28) {
+    return 2;
+  } else if (cardNumber >= 29 && cardNumber <= 32) {
+    return 3;
+  } else if (cardNumber >= 33 && cardNumber <= 36) {
+    return 4;
+  }
+}
+
 const result = document.querySelector(".result");
 const btn = document.querySelector(".btn");
 const userName = document.querySelector("#user-name");
 const userScore = document.querySelector("#user-score");
-const userNumber = document.querySelector("#user-number");
+const userCard = document.querySelector("#user-card");
 const pcScore = document.querySelector("#pc-score");
-const pcNumber = document.querySelector("#pc-number");
+const pcCard = document.querySelector("#pc-card");
+const tryNumber = document.querySelector("#try");
 
+let tryNumberInt = parseInt(tryNumber.innerHTML);
 let userScoreInt = parseInt(userScore.innerHTML);
 let pcScoreInt = parseInt(pcScore.innerHTML);
-let userNumberInt = parseInt(userNumber.innerHTML);
-let pcNumberInt = parseInt(pcNumber.innerHTML);
 let isFinished = true;
+let userCardNumber;
+let pcCardNumber;
 
 while (!usernameValidation(userName.innerHTML)) {
   userName.innerHTML = prompt("Please, enter your username. It must be at least 2 characters");
@@ -31,38 +56,37 @@ while (!usernameValidation(userName.innerHTML)) {
 btn.addEventListener("click", function() {
   if(isFinished) {
     isFinished = false;
+    tryNumber.innerHTML = ++tryNumberInt;
+
     document.body.style.background = "white";
     btn.classList.add("btn__disabled");
     
     let timer = setInterval(() => {
-      userNumber.innerHTML = randomInt(11);
-      pcNumber.innerHTML = randomInt(11);
+      userCardNumber = parseInt(randomInt(36) + 1);
+      pcCardNumber = parseInt(randomInt(36) + 1);
+      
+      userCard.src = "img/cards/card-" + userCardNumber + ".jpg";
+      pcCard.src = "img/cards/card-" + pcCardNumber + ".jpg";
     }, 100);
 
     setTimeout(() => { 
       clearInterval(timer);
 
+      userScoreInt += getCardValue(userCardNumber);
+      pcScoreInt += getCardValue(pcCardNumber);
+
       setTimeout(() => {
-        userNumberInt = parseInt(userNumber.innerHTML);
-        pcNumberInt = parseInt(pcNumber.innerHTML);
-
-        if (userNumberInt > pcNumberInt) {
-          userScoreInt++;
-          document.body.style.background = "linear-gradient(90deg, #5fefc7, transparent)";
-        } else if (userNumberInt < pcNumberInt) {
-          pcScoreInt++;
-          document.body.style.background = "linear-gradient(-90deg, #5fefc7, transparent)";
-        }
-
         userScore.innerHTML = userScoreInt;
         pcScore.innerHTML = pcScoreInt;
+
         btn.classList.remove("btn__disabled");
 
-        if (userScoreInt >= 3 || pcScoreInt >= 3) {
-          result.innerHTML = (userScoreInt >= 3) ? userName.innerHTML + " win!" : "Computer win!";
-          userNumber.style.display = "none";
-          pcNumber.style.display = "none";
+        if (tryNumberInt >= 3) {
+          result.innerHTML = (userScoreInt > pcScoreInt) ? userName.innerHTML + " win!" : "Computer win!";
+          userCard.style.display = "none";
+          pcCard.style.display = "none";
           btn.innerHTML = "Try again";
+          document.body.style.background = "linear-gradient(90deg, #5fefc7, transparent)";
 
           btn.addEventListener("click", pageReload);
           return;
